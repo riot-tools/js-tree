@@ -1,0 +1,156 @@
+$size: 16px !default;
+$treeViewBorderLeft: 1px solid rgba(#fff, 0.1) !default;
+$itemBorderFocus: 2px solid #424242 !default;
+$actionColor: rgb(150, 150, 150) !default;
+$actionBgHover: rgba(255,200,200, 0.3) !default;
+$nameValueHover: rgba(aqua, 0.1) !default;
+$nameColor: rgb(136, 19, 145) !default;
+$boolNumColor: rgb(28, 0, 207) !default;
+$expandableColor: #424242 !default;
+$nullUndefinedColor: #808080 !default;
+$stringDateColor: #c41a16 !default;
+
+.tree-view {
+
+    font-family: monospace;
+    font-size: $size;
+    line-height: $size;
+    padding: 2px;
+    padding-left: 20px;
+    position: relative;
+
+    user-select: none;
+
+    .item {
+        display: inline-block;
+        padding: 2px;
+    }
+
+    .spacer {
+        width: 30px;
+        height: $size;
+    }
+
+    .expand,
+    .collapse {
+        padding: 2px;
+        text-align: middle;
+        vertical-align: middle;
+
+        cursor: pointer;
+    }
+
+    .name, .value {
+        cursor: default;
+    }
+
+    .name::after {
+        content: ":"
+    }
+
+
+    .children {
+
+        display: block;
+    }
+
+    .expand, .collapse, .delete {
+
+        &::before {
+
+            padding: 2px;
+        }
+    }
+
+    .expand, .collapse {
+
+        margin-left: -20px;
+
+    }
+
+    .expand {
+        transform: rotate(270deg);
+        &::before {
+            content: "▼";
+        }
+    }
+
+    .collapse{
+        &::before {
+            content: "▼";
+        }
+    }
+}
+
+
+.tree-view.base-theme {
+
+    font-family: monospace;
+    font-size: $size;
+    line-height: $size;
+
+
+    .tree-view {
+        border-left: $treeViewBorderLeft;
+    }
+
+    .item:focus {
+        border: $itemBorderFocus;
+    }
+
+
+    .spacer {
+        height: $size;
+    }
+
+
+    .expand,
+    .collapse {
+
+        color: $actionColor;
+
+        &:hover {
+
+            background: $actionBgHover;
+        }
+    }
+
+
+    .name, .value {
+
+        &:hover {
+            background-color: $nameValueHover;
+        }
+    }
+
+    .name { color: $nameColor; }
+
+    .value {
+
+
+        &.Boolean,
+        &.Number {
+
+            color: $boolNumColor;
+        }
+
+        &.Object,
+        &.Array,
+        &.Map,
+        &.Set {
+            color: $expandableColor;
+        }
+
+        &.undefined,
+        &.null {
+
+            color: $nullUndefinedColor;
+        }
+
+        &.String,
+        &.Date {
+            color: $stringDateColor;
+        }
+    }
+
+}

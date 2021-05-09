@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "lib": ["es6",  "es2018", "dom", "esnext"],
+        "module": "esnext",
+        "moduleResolution": "node",
+        "noEmitOnError": false,
+        "noUnusedParameters": true,
+        "allowUmdGlobalAccess": true,
+        "pretty": true,
+        "sourceMap": true,
+        "target": "esnext",
+        "outDir": "dist",
+        "declaration": true,
+        "rootDir": "lib"
+    },
+    "paths": {
+        "tslib" : ["./node_modules/tslib/tslib.d.ts"]
+    },
+    "exclude": [
+        "example"
+    ]
+}
