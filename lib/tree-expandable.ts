@@ -109,8 +109,16 @@ export class TreeExandable extends TreeBase {
           * Mount to a point in the config, or create one
           */
         const mountPoint = opts.mountTo || '#json-tree';
+        let domNode
 
-        let domNode = document.querySelector(mountPoint);
+        if (opts.mountTo && (opts.mountTo as HTMLElement).nodeName) {
+            domNode = opts.mountTo;
+        }
+        else {
+
+            domNode = document.querySelector(mountPoint as string);
+        }
+
 
         if (!domNode) {
             domNode =  createNode(mountPoint) as HTMLElement;

@@ -3,7 +3,7 @@ import type { TreeExandable } from './tree-expandable';
 export interface TreeItemOptions {
     name?: string|number;
     value?: any;
-    mountTo?: string,
+    mountTo?: string|HTMLElement,
     theme?: string,
     parent?: TreeExandable
 };
