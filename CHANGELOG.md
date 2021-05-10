@@ -1,3 +1,17 @@
+# 1.0.0 (2021-05-10)
+
+
+### Bug Fixes
+
+* 🐛 allow mount to html element ([074c49c](https://github.com/damusix/modern-js-tree/commit/074c49c44d16e5accd060f82870f0daf19fa6eb1))
+* 🐛 better keyboard support ([507eaa7](https://github.com/damusix/modern-js-tree/commit/507eaa7d2f09c0ca8cfaf0c8ce8a9c321475d30f))
+* 🐛 mount to same element on update ([22ea2ed](https://github.com/damusix/modern-js-tree/commit/22ea2edabdeaaf797af86ba0cec4c9279691d1ed))
+
+
+### Features
+
+* 🎸 initial commit ([d04b90d](https://github.com/damusix/modern-js-tree/commit/d04b90d8b295063fb5c721e4e43e6a3e62e17b68))
+
 ## [1.0.1](https://github.com/damusix/modern-js-tree/compare/v1.0.0...v1.0.1) (2021-05-10)
 
 
