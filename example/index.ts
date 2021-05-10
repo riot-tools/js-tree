@@ -41,9 +41,11 @@ const sample = {
     ])
 }
 
+const mountTo = document.querySelector('div#tree');
+
 const treeView = new TreeExandable({
     value: sample,
-    mountTo: 'div#tree'
+    mountTo
 });
 
 const events = [

@@ -22,11 +22,12 @@ export class TreeExandable extends TreeBase {
     constructor(opts: TreeItemOptions) {
 
         super(opts);
+
+        this.originalOptions = opts;
+        delete this.originalOptions.value;
     }
 
     _setup(opts: TreeItemOptions) {
-
-        this.originalOptions = opts;
 
         super._setup(opts);
 
@@ -115,13 +116,12 @@ export class TreeExandable extends TreeBase {
             domNode = opts.mountTo;
         }
         else {
-
             domNode = document.querySelector(mountPoint as string);
         }
 
 
         if (!domNode) {
-            domNode =  createNode(mountPoint) as HTMLElement;
+            domNode = createNode(mountPoint) as HTMLElement;
             document.body.appendChild(domNode);
         }
 
@@ -139,6 +139,8 @@ export class TreeExandable extends TreeBase {
         else {
             this.elements.container.classList.add('base-theme');
         }
+
+        this._expand(true);
     }
 
     /**
@@ -325,6 +327,7 @@ export class TreeExandable extends TreeBase {
         this._removeChildren();
         this.elements.container.remove();
         this.mounted = false;
+
         this._setup({
             ...this.originalOptions,
             value
