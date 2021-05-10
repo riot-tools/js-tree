@@ -75,8 +75,8 @@ Though the default theme will likely fit a light or dark container, you can cust
   border-left: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.tree-view.my-custom-theme .item:focus {
-  border: 2px solid #424242;
+.tree-view.my-custom-theme .container:focus {
+  outline: 2px solid #424242;
 }
 
 .tree-view.my-custom-theme .spacer {
@@ -146,8 +146,8 @@ $stringDateColor: #c41a16;
         border-left: $treeViewBorderLeft;
     }
 
-    .item:focus {
-        border: $itemBorderFocus;
+    .container:focus {
+        outline: $itemBorderFocus;
     }
 
 
