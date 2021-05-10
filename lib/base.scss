@@ -94,8 +94,8 @@ $stringDateColor: #c41a16 !default;
         border-left: $treeViewBorderLeft;
     }
 
-    .item:focus {
-        border: $itemBorderFocus;
+    .container:focus {
+        outline: $itemBorderFocus;
     }
 
 

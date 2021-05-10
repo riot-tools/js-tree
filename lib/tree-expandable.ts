@@ -3,6 +3,8 @@ import { TreeItemOptions } from './types';
 import {
     createNode,
     css,
+    focusAdjacentTabbable,
+    getAdjacentTabbable
 } from './helpers/dom';
 
 import { isExpandable } from './helpers/meta';
@@ -16,6 +18,7 @@ export class TreeExandable extends TreeBase {
     expanded: boolean = false;
     mounted: boolean = false;
     originalOptions: TreeItemOptions = null;
+    root: TreeExandable = null;
 
     filterText: string = '';
 
@@ -25,6 +28,70 @@ export class TreeExandable extends TreeBase {
 
         this.originalOptions = opts;
         delete this.originalOptions.value;
+
+        if (opts.root) {
+            this.root = opts.root;
+        }
+    }
+
+    _keydown(e) {
+
+        const isKey = { [e.key as string]: true };
+
+        if (isKey.Enter || e.key === ' ') {
+
+            this.toggle();
+
+        }
+
+        if (isKey.ArrowRight) {
+
+            if (this.expanded) {
+                getAdjacentTabbable(e.target as HTMLElement, 1)?.focus()
+            }
+            else {
+                this._expand();
+            }
+        }
+
+        if (isKey.ArrowLeft) {
+
+            if (!this.expanded) {
+                getAdjacentTabbable(e.target as HTMLElement, -1)?.focus()
+            }
+            else {
+                this._collapse(true);
+            }
+        }
+
+        if (isKey.ArrowUp || isKey.ArrowDown) {
+
+            // up
+            let dir = -1;
+
+            if (isKey.ArrowDown) {
+                dir = 1;
+            }
+
+            focusAdjacentTabbable(
+                e.target,
+                this.root?.elements.container,
+                dir
+            )
+        }
+
+        if (
+            e.key === ' ' ||
+            isKey.Enter ||
+            isKey.ArrowDown ||
+            isKey.ArrowRight ||
+            isKey.ArrowLeft ||
+            isKey.ArrowUp
+        ) {
+
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        }
     }
 
     _setup(opts: TreeItemOptions) {
@@ -56,7 +123,7 @@ export class TreeExandable extends TreeBase {
         this.elements.value.addEventListener('click', _toggle);
         this.elements.expand.addEventListener('click', _toggle);
 
-        this._addChildren();
+        this._addChildren(opts.root || this);
 
         if (this.parent) {
 
@@ -64,39 +131,7 @@ export class TreeExandable extends TreeBase {
              * Make expandables tabbable and allow enter and spacebar to trigger toogle
              */
             this.elements.container.setAttribute('tabindex', '0');
-            this.elements.container.addEventListener('keydown', (e) => {
-
-                const isKey = { [e.key]: true };
-
-                if (isKey.Enter || e.key === ' ') {
-
-                    _toggle();
-
-                }
-
-                if (isKey.ArrowDown || isKey.ArrowRight) {
-
-                    self._expand();
-                }
-
-                if (isKey.ArrowUp || isKey.ArrowLeft) {
-
-                    self._collapse(true);
-                }
-
-                if (
-                    e.key === ' ' ||
-                    isKey.Enter ||
-                    isKey.ArrowDown ||
-                    isKey.ArrowRight ||
-                    isKey.ArrowLeft ||
-                    isKey.ArrowUp
-                ) {
-
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                }
-            });
+            this.elements.container.addEventListener('keydown', (e) => this._keydown(e));
 
             return;
         }
@@ -130,7 +165,7 @@ export class TreeExandable extends TreeBase {
         );
 
         this.mounted = true;
-        console.info('mounted:', this.mounted, 'to:', domNode);
+        console.info('mounted to:', domNode);
 
         if (typeof opts.theme === 'string') {
 
@@ -253,7 +288,7 @@ export class TreeExandable extends TreeBase {
     /**
      * Cycles through child items and creates TreeItems from them.
      */
-    _addChildren() {
+    _addChildren(root: TreeExandable) {
 
         let entries = Object.entries(this.value).sort(
             (a, b): number => {
@@ -289,7 +324,8 @@ export class TreeExandable extends TreeBase {
                 child = new TreeExandable({
                     name: key,
                     value,
-                    parent: this
+                    parent: this,
+                    root
                 });
             }
             else {

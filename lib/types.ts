@@ -3,9 +3,10 @@ import type { TreeExandable } from './tree-expandable';
 export interface TreeItemOptions {
     name?: string|number;
     value?: any;
-    mountTo?: string|HTMLElement,
-    theme?: string,
-    parent?: TreeExandable
+    mountTo?: string|HTMLElement;
+    theme?: string;
+    parent?: TreeExandable;
+    root?: TreeExandable;
 };
 
 export type TreeElements = {

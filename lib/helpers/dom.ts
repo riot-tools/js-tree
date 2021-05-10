@@ -190,3 +190,54 @@ export const appendChildren = (
         parent.appendChild(child);
     }
 };
+
+export const isFocused = (el: HTMLElement): boolean => document.activeElement === el;
+
+export const tabbables = (root: HTMLElement): NodeList => root.querySelectorAll('[tabindex]');
+
+export const getAdjacentTabbable = (el: HTMLElement, pos: number = 1): HTMLElement => {
+
+	let adjacent: HTMLElement;
+
+	if (isFocused(el)) {
+
+		if (pos === -1) {
+
+			adjacent = el.parentElement.closest('[tabindex]');
+		}
+
+		if (pos === 1) {
+
+			adjacent = tabbables(el)[0] as HTMLElement
+		}
+	}
+
+
+	if (!adjacent) {
+		const _tabs = Array.from(tabbables(el.parentElement)) as HTMLElement[];
+
+		const idx = _tabs.indexOf(el);
+
+		adjacent = _tabs[idx + pos];
+	}
+
+	return adjacent;
+};
+
+export const visibleTabbables = (root: HTMLElement): HTMLElement[] => (
+
+	Array.from(
+		root.querySelectorAll([
+			'.expanded > .children > .collapsed',
+			'.expanded > .children > .expanded'
+		].join(','))
+	)
+);
+
+export const focusAdjacentTabbable = (root: HTMLElement, base: HTMLElement|undefined, dir: number): void => {
+
+	const visibles = visibleTabbables(base);
+	const idx = visibles.indexOf(root);
+
+	visibles[idx + dir]?.focus();
+}
