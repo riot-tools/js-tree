@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/damusix/modern-js-tree/compare/v1.0.2...v1.0.3) (2021-05-10)
+
+
+### Bug Fixes
+
+* 🐛 version bump ([614c405](https://github.com/damusix/modern-js-tree/commit/614c405149df8dda1e0b33c0a1e0ea4200e39135))
+
 # 1.0.0 (2021-05-10)
 
 
