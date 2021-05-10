@@ -215,3 +215,4 @@ $stringDateColor: #c41a16;
 - [ ] Add support for functions and HTML elements
 - [ ] Add support for misc classes
 - [ ] Add ability to add, remove, rename, and change value of items in tree
+
