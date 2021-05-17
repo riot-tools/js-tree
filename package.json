@@ -1,6 +1,6 @@
 {
     "name": "modern-js-tree",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Explore JS state stores in a navigable tree format",
     "license": "MIT",
     "main": "dist/index.umd.js",

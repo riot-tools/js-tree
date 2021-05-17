@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/damusix/modern-js-tree/compare/v1.0.3...v1.0.4) (2021-05-17)
+
+
+### Bug Fixes
+
+* 🐛 smoother updatees ([299b461](https://github.com/damusix/modern-js-tree/commit/299b4614c1668b69398f71c564ed1c0a9b1f32d6))
+
 ## [1.0.3](https://github.com/damusix/modern-js-tree/compare/v1.0.2...v1.0.3) (2021-05-10)
 
 
