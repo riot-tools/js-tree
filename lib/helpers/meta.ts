@@ -1,3 +1,7 @@
+import type {
+    AllowedTypes, ExpandibleType, TreeName
+} from '../types';
+
 export const defineProperties = (target: object, props: object, opts: any = {}) => {
 
     const mapped = Object.entries(props).map(([name, value]) => {
@@ -83,6 +87,7 @@ export const tryMany = (...fns) => {
     }
 };
 
+
 export const allowedTypes = [
     Array,
     Object,
@@ -96,27 +101,6 @@ export const allowedTypes = [
     undefined
 ];
 
-export type AllowedObject = {
-    [key: string]: AllowedTypes
-};
-
-export type ExpandibleType = (
-
-    AllowedTypes[] |
-    AllowedObject |
-    Set<AllowedTypes> |
-    Map<String|Number, AllowedTypes>
-)
-
-export type AllowedTypes = (
-    ExpandibleType |
-    Number |
-    String |
-    Date |
-    boolean |
-    null |
-    undefined
-)
 
 export const extractType = (value: AllowedTypes) => {
 
@@ -147,16 +131,6 @@ export const pick = (value: Object, ...keys: string[]) => (
     Object.fromEntries(keys.map((k) => [k, value[k]]))
 );
 
-export const getKeys = (value: any) => {
-    const keys = [];
-
-    for (const k in value) {
-        keys.push(k);
-    }
-
-    return keys;
-};
-
 export const traceValue = (value, ...keys) => {
 
     return new Proxy(value, {
@@ -182,3 +156,72 @@ export const traceValue = (value, ...keys) => {
         },
     });
 }
+
+export const getKeys = (value: ExpandibleType, type: string = null) => {
+
+    type = type || typeToString(extractType(value))
+
+    if (
+        type === 'Array' ||
+        type === 'Object'
+    ) {
+
+        return Object.keys(value);
+    }
+
+    if (type === 'Set') {
+
+        return Object.keys([...(value as Set<any>).values()]);
+    }
+
+    if (type === 'Map') {
+
+        return [...(value as Map<any, any>).keys()];
+    }
+};
+
+export const getEntries = (value: ExpandibleType, type: string = null) => {
+
+    type = type || typeToString(extractType(value))
+
+    if (
+        type === 'Array' ||
+        type === 'Object'
+    ) {
+
+        return Object.entries(value);
+    }
+
+    if (type === 'Set') {
+
+        return Object.entries([...(value as Set<any>).values()]);
+    }
+
+    if (type === 'Map') {
+
+        return [...(value as Map<any, any>).entries()];
+    }
+};
+
+export const getSize = (value: ExpandibleType, type: string) => {
+
+    type = type || typeToString(extractType(value))
+
+    if (type === 'Array') {
+
+        return (value as Array<any>).length;
+    }
+
+    if (type === 'Object') {
+
+        return Object.keys(value).length;
+    }
+
+    return (value as Set<any>).size;
+};
+
+export const arrToBoolObject = (arr: TreeName[]): { [key: string]: boolean } => (
+    Object.fromEntries(
+        arr.map(key => [key, true])
+    )
+)

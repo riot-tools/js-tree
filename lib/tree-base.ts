@@ -17,7 +17,9 @@ import {
 
 import {
     TreeElements,
-    TreeItemOptions
+    TreeItemOptions,
+    TreeContainerElement,
+    TreeChangeOptions
 } from './types';
 
 
@@ -28,6 +30,7 @@ export class TreeBase extends DOMEventEmitter {
     type: string = null;
     parent: TreeBase = null;
     children: Set<any> = new Set();
+    path: Array<any> = [];
 
     searchMatched: boolean = null;
     elements: TreeElements = null;
@@ -45,51 +48,63 @@ export class TreeBase extends DOMEventEmitter {
         /**
          * From options, evaluate config data for this particular tree item
          */
-         this.name = opts.name || 'root';
-         this.value = opts.value;
-         this.type = typeToString(extractType(opts.value));
+        this.name = opts.name || 'root';
+        this.value = opts.value;
+        this.type = typeToString(extractType(opts.value));
 
          /**
           * Create the base elements and append them
           */
-         this.elements = {
-             container: createNode('.container.tree-view') as HTMLElement,
-             name: createNode('.name.item') as HTMLElement,
-             value: createNode('.value.item') as HTMLElement,
-         };
+        this.elements = {
+            container: createNode('.container.tree-view') as TreeContainerElement,
+            name: createNode('.name.item') as HTMLElement,
+            value: createNode('.value.item') as HTMLElement,
+        };
 
-         appendChildren(
-             this.elements.container,
-             this.elements.name,
-             this.elements.value,
-         );
+        appendChildren(
+            this.elements.container,
+            this.elements.name,
+            this.elements.value,
+        );
 
          /**
           * Add visual feedback
           */
-         this._populateElements();
+        this._populateElements();
 
-         if (opts.parent) {
+        if (opts.parent) {
 
-             this.parent = opts.parent;
+            this.parent = opts.parent;
 
-             /** Add self to child */
-             this.parent.elements.children.appendChild(
-                 this.elements.container
-             );
+            /** Add self to child */
+            this.parent.elements.children.appendChild(
+                this.elements.container
+            );
 
-             const self = this;
+            const self = this;
 
-             /** Bubble events up to parent items */
-             for (const event of Object.values(EVENTS)) {
-                 this.on(event, (tree) => {
+            /** Bubble events up to parent items */
+            for (const event of Object.values(EVENTS)) {
+                this.on(event, (tree) => {
 
-                     self.parent.emit(event, tree);
-                 })
-             }
+                    self.parent.emit(event, tree);
+                })
+            }
 
-             this.emit(EVENTS.APPEND, this);
-         }
+            this.emit(EVENTS.APPEND, this);
+
+            this.path = this.path.concat(
+                this.parent.path,
+                this.name
+            );
+
+            this.elements.container.id = this.path.join('-');
+            this.elements.container._jsTree = this;
+        }
+        else {
+
+            this.path = ['_'];
+        }
     }
 
     _populateElements() {
@@ -158,5 +173,19 @@ export class TreeBase extends DOMEventEmitter {
 
             this._hide();
         }
+    }
+
+    _change(opts: TreeChangeOptions) {
+
+        if (opts.name) {
+            this.name = opts.name;
+        }
+
+        if (opts.value) {
+            this.value = opts.value;
+            this.type = typeToString(extractType(opts.value));
+        }
+
+        this._populateElements();
     }
 }

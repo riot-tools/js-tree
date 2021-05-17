@@ -3,6 +3,7 @@ import './devtools.scss';
 import { TreeExandable } from '../lib/tree-expandable';
 
 const sample = {
+    x: 0,
     test: {
         prrrt: true,
         when: new Date(),
@@ -73,3 +74,11 @@ search.addEventListener('keyup', () => {
 
     treeView.search(search.value);
 });
+
+setInterval(() => {
+
+    treeView.update({
+        ...sample,
+        x: sample.x++
+    })
+}, 3 * 1000)

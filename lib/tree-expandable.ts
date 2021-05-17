@@ -1,4 +1,5 @@
-import { TreeItemOptions } from './types';
+import { deepEqual } from '@riot-tools/state-utils';
+import { TreeItemOptions, TreeContainerElement, TreeEntry, TreeEntries, TreeName } from './types';
 
 import {
     createNode,
@@ -7,7 +8,15 @@ import {
     getAdjacentTabbable
 } from './helpers/dom';
 
-import { isExpandable } from './helpers/meta';
+import {
+    getKeys,
+    getSize,
+    getEntries,
+    isExpandable,
+    extractType,
+    typeToString,
+    arrToBoolObject
+} from './helpers/meta';
 
 import { TreeBase } from './tree-base';
 import { EVENTS } from './helpers/constants';
@@ -137,7 +146,8 @@ export class TreeExandable extends TreeBase {
         }
 
         if (this.mounted) {
-            console.warn('this tree view has already been mounted');
+
+            opts.silent || console.warn('this tree view has already been mounted');
             return;
         }
 
@@ -178,25 +188,23 @@ export class TreeExandable extends TreeBase {
         this._expand(true);
     }
 
+    _keys() {
+
+        return getKeys(this.value, this.type);
+    }
+
+    _size() {
+
+        return getSize(this.value, this.type);
+    }
+
     /**
      * Overwrites parent class to handle special case for
      * expandable types
      */
     _populateValue() {
 
-        let size = this.value.size;
-
-        if (this.type === 'Array') {
-
-            size = this.value.length;
-        }
-
-        if (this.type === 'Object') {
-
-            size = Object.keys(this.value).length;
-        }
-
-        this.elements.value.innerText = `${this.type}[${size}]`;
+        this.elements.value.innerText = `${this.type}[${this._size()}]`;
         this.elements.value.classList.add(this.type);
     }
 
@@ -285,6 +293,31 @@ export class TreeExandable extends TreeBase {
 
     }
 
+    _addChild(name, value, root?: TreeExandable) {
+
+        let child;
+
+        if (isExpandable(value)) {
+
+            child = new TreeExandable({
+                name,
+                value,
+                parent: this,
+                root
+            });
+        }
+        else {
+
+            child = new TreeBase({
+                name,
+                value,
+                parent: this
+            });
+        }
+
+        this.children.add(child);
+    }
+
     /**
      * Cycles through child items and creates TreeItems from them.
      */
@@ -315,29 +348,8 @@ export class TreeExandable extends TreeBase {
             entries = Object.entries([...this.value.values()]);
         }
 
-        for (const [key, value] of entries) {
-
-            let child;
-
-            if (isExpandable(value)) {
-
-                child = new TreeExandable({
-                    name: key,
-                    value,
-                    parent: this,
-                    root
-                });
-            }
-            else {
-
-                child = new TreeBase({
-                    name: key,
-                    value,
-                    parent: this
-                });
-            }
-
-            this.children.add(child);
+        for (const [name, value] of entries) {
+            this._addChild(name, value, root);
         }
     }
 
@@ -354,20 +366,135 @@ export class TreeExandable extends TreeBase {
         }
     }
 
+    _findChild(key): TreeExandable {
+
+        for (const child of this.children) {
+
+            if (child.name === key) {
+                return child;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Updates the previous value and rebuilds HTML elements
      * @param value Value to update
      */
     update(value) {
 
-        this._removeChildren();
-        this.elements.container.remove();
-        this.mounted = false;
+        // If update equals current value, don't do anything
+        if (deepEqual(value, this.value)) {
+            return;
+        }
 
-        this._setup({
-            ...this.originalOptions,
-            value
-        });
+        const incomingType = typeToString(extractType(value));
+
+        // Handle a type change
+        if (incomingType !== this.type) {
+
+            this._removeChildren();
+            this.elements.container.remove();
+            this.mounted = false;
+
+            this._setup({
+                ...this.originalOptions,
+                value
+            });
+
+            return;
+        }
+
+        this.value = value;
+        this._populateElements();
+
+        const newEntries: TreeEntries = getEntries(value);
+        const currentKeys: TreeName[] = this._keys();
+
+        const newHasKey = arrToBoolObject(newEntries.map(([k]) => k));
+        const currentHasKey = arrToBoolObject(currentKeys);
+
+        const setForDelete: TreeName[] = [];
+        const setForCreate: TreeEntries = [];
+        const setForUpdate: TreeEntries = [];
+
+        for (const key of currentKeys) {
+
+            if (!newHasKey[key]) {
+                setForDelete.push(key);
+            }
+        }
+
+        for (const [key, val] of newEntries) {
+
+            if (!currentHasKey[key]) {
+                setForCreate.push([key, val]);
+            }
+            else {
+                setForUpdate.push([key, val]);
+            }
+        }
+
+        for (const key of setForDelete) {
+
+            const child = this._findChild(key);
+
+            child._removeSelf();
+        }
+
+        const root = this.root || this;
+
+        for (const key of setForCreate) {
+
+            this._addChild(
+                key,
+                value,
+                root
+            )
+        }
+
+        for (const [key, value] of setForUpdate) {
+
+            const child = this._findChild(key);
+
+            child._change({ value });
+
+            if (child.expandable) {
+                child.update(value);
+            }
+        }
+        // let focusOn: string;
+        // const focusedTree = (document.activeElement as TreeContainerElement)?._jsTree;
+
+        // console.log(focusedTree)
+
+        // if (focusedTree) {
+
+        //     focusOn = focusedTree.elements.container.id;
+
+        //     console.log(focusOn);
+
+        // }
+
+        // this._removeChildren();
+        // this.elements.container.remove();
+        // this.mounted = false;
+
+        // this._setup({
+        //     ...this.originalOptions,
+        //     value
+        // });
+
+        // setTimeout(() => {
+
+        //     if (focusOn) {
+
+        //         const element = document.getElementById(focusOn) as TreeContainerElement;
+        //         element.focus();
+        //     }
+        // }, 1);
+
     }
 
     /**
