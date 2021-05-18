@@ -1,5 +1,5 @@
 {
-    "name": "modern-js-tree",
+    "name": "@riot-tools/js-tree",
     "version": "1.0.5",
     "description": "Explore JS state stores in a navigable tree format",
     "license": "MIT",
@@ -16,10 +16,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/damusix/modern-js-tree.git"
+        "url": "git+https://github.com/riot-tools/js-tree.git"
     },
     "bugs": {
-        "url": "https://github.com/damusix/modern-js-tree/issues"
+        "url": "https://github.com/riot-tools/js-tree/issues"
     },
     "publishConfig": {
         "registry": "https://registry.npmjs.org/"
