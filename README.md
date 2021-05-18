@@ -19,14 +19,14 @@ No depedency, javascript tree viewer that shows you basic data types, `Object`, 
 ## Getting Started
 
 ```bash
-npm i --save modern-js-tree
+npm i --save @riot-tools/js-tree
 ```
 
 `index.js`
 
 ```js
 
-const ModernJsTree = require('modern-js-tree');
+const ModernJsTree = require('@riot-tools/js-tree');
 
 const treeView = ModernJsTree({
     value: { /** value to inspect */ },
