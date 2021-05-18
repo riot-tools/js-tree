@@ -4,6 +4,19 @@
 ### Bug Fixes
 
 * 🐛 move to riot tools ([ad72a67](https://github.com/riot-tools/js-tree/commit/ad72a670cc277d0b7fa519caa826bc35ddd6bded))
+* 🐛 public package ([a442a14](https://github.com/riot-tools/js-tree/commit/a442a1406b1dcf078cc80b754224724cbefe9bed))
+
+
+### BREAKING CHANGES
+
+* 🧨 org change
+
+# [2.0.0](https://github.com/riot-tools/js-tree/compare/v1.0.5...v2.0.0) (2021-05-18)
+
+
+### Bug Fixes
+
+* 🐛 move to riot tools ([ad72a67](https://github.com/riot-tools/js-tree/commit/ad72a670cc277d0b7fa519caa826bc35ddd6bded))
 
 
 ### BREAKING CHANGES
