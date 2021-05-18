@@ -1,6 +1,6 @@
 {
     "name": "@riot-tools/js-tree",
-    "version": "2.0.0",
+    "version": "1.0.5",
     "description": "Explore JS state stores in a navigable tree format",
     "license": "MIT",
     "main": "dist/index.umd.js",
@@ -22,7 +22,8 @@
         "url": "https://github.com/riot-tools/js-tree/issues"
     },
     "publishConfig": {
-        "registry": "https://registry.npmjs.org/"
+        "registry": "https://registry.npmjs.org/",
+        "access": "public"
     },
     "keywords": [
         "json",
