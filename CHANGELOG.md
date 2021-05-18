@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/damusix/modern-js-tree/compare/v1.0.4...v1.0.5) (2021-05-18)
+
+
+### Bug Fixes
+
+* 🐛 resolve state utils ([66b9b66](https://github.com/damusix/modern-js-tree/commit/66b9b6696b6f99cfb97efa8aba9db7e5140d1989))
+
 ## [1.0.4](https://github.com/damusix/modern-js-tree/compare/v1.0.3...v1.0.4) (2021-05-17)
 
 
