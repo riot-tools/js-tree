@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/riot-tools/js-tree/compare/v1.0.5...v2.0.0) (2021-05-18)
+
+
+### Bug Fixes
+
+* 🐛 move to riot tools ([ad72a67](https://github.com/riot-tools/js-tree/commit/ad72a670cc277d0b7fa519caa826bc35ddd6bded))
+
+
+### BREAKING CHANGES
+
+* 🧨 org change
+
 ## [1.0.5](https://github.com/damusix/modern-js-tree/compare/v1.0.4...v1.0.5) (2021-05-18)
 
 
