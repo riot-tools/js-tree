@@ -33,6 +33,7 @@
     ],
     "devDependencies": {
         "@riot-tools/state-utils": "^1.1.0",
+        "@rollup/plugin-node-resolve": "^13.0.0",
         "@semantic-release/changelog": "^5.0.1",
         "@semantic-release/git": "^9.0.0",
         "@types/node": "^14.14.31",

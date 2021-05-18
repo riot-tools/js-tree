@@ -7,6 +7,7 @@ import typescript from 'rollup-plugin-typescript2';
 import scss from 'rollup-plugin-scss';
 import del from 'rollup-plugin-delete';
 import generatePackageJson from 'rollup-plugin-generate-package-json';
+import resolve from '@rollup/plugin-node-resolve';
 
 import pkg from './package.json';
 import tsconfig from './tsconfig.json';
@@ -17,6 +18,10 @@ export default [
         plugins: [
 
             del({ targets: 'dist/*' }),
+
+            resolve({
+                resolveOnly: ['@riot-tools/state-utils']
+            }),
 
             typescript({
                 typescript: require('typescript'),
